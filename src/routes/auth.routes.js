@@ -8,7 +8,8 @@ import {
   requestRegisterCode,
   verifyRegisterCode,
   requestLoginCode,
-  verifyLoginCode
+  verifyLoginCode,
+  registerAdmin,
 } from "../controllers/auth.controller.js";
 import { authRequired } from "../middlewares/validateToken.js";
 import { validateSchema } from "../middlewares/validator.middleware.js";
@@ -40,7 +41,6 @@ router.post("/register/verify-code", verifyRegisterCode);
 
 router.post("/login-mobile/request-code", requestLoginCode);
 router.post("/login-mobile/verify-code", verifyLoginCode);
-
 
 //para una ruta protegida, vamos a necesitar una ruta que tengamos que proteger, por ejemplo
 //lo vamos a usar despues para todo lo que vayamos a usar en el homePage
