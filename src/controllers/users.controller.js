@@ -22,7 +22,7 @@ export const createUsers = async (req, res) => {
   //guardamos
   const savedUser = await newUser.save();
   res.json(savedUser);
-};
+};  
 
 export const getTask = async (req, res) => {
   //buscar una tarea en especifico mediante el id

@@ -2,14 +2,14 @@ import express from "express";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import dotenv from "dotenv";
+dotenv.config();
 import authRoutes from "./routes/auth.routes.js";
 import tasksRoutes from "./routes/tasks.routes.js";
 import goalRoutes from "./routes/goal.routes.js";
 import informationRoutes from "./routes/information.routes.js";
 import userRoutes from "./routes/user.routes.js";
-
-
+import usersRoutes from "./routes/users.routes.js";
 
 const app = express();
 
@@ -26,7 +26,6 @@ app.use(
 );
 
 app.use("/api", authRoutes);
-
 app.use("/api", tasksRoutes); //prueba de validar token y que este logeado el usuario para entrar ahi
 
 app.use("/api", goalRoutes);
@@ -34,5 +33,6 @@ app.use("/api", goalRoutes);
 app.use("/api", informationRoutes);
 
 app.use("/api", userRoutes);
+app.use("/api", usersRoutes);
 
 export default app;
