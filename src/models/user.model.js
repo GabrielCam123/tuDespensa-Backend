@@ -7,16 +7,8 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
     },
     email: {
-      type: String,
-      required: true,
-      trim: true,
-      unique: true,
       type: String,
       required: true,
       trim: true,
@@ -32,9 +24,24 @@ const userSchema = new mongoose.Schema(
       enum: ["Usuario", "Administrador"],
       default: "Usuario",
     },
+    plan: {
+      type: String,
+      enum: ["Gratuito", "Premium"],
+      default: "Gratuito",
+    },
+    profilePhoto: {
+      type: String,
+      default: "imgsUsr/default.jpg",
+    },
     status: {
       type: Boolean,
       default: true,
+    },
+    verificationCode: {
+      type: String,
+    },
+    verificationExpires: {
+      type: Date,
     },
   },
   {

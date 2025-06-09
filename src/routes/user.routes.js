@@ -7,10 +7,11 @@ import { User } from "../models/user.model.js";
 const router = Router();
 
 router.get("/profile", authRequired, async (req, res) => {
-    console.log("req.user:", req.user); // <-- Agregado
+  console.log("req.user:", req.user); // <-- Agregado
   try {
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+    if (!user)
+      return res.status(404).json({ message: "Usuario no encontrado" });
 
     res.json({
       id: user._id,

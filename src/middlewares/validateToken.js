@@ -15,3 +15,22 @@ export const authRequired = (req, res, next) => {
     next();
   });
 };
+
+//segales
+export const authRequired_app = (req, res, next) => {
+  // Obtener el token del header Authorization o de las cookies
+  const authHeader = req.headers["authorization"];
+  const token = authHeader ? authHeader.split(" ")[1] : req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({ message: "No token, autorización denegada" });
+  }
+
+  try {
+    const decoded = jwt.verify(token, TOKEN_SECRET);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ message: "Token inválido" });
+  }
+};

@@ -1,20 +1,34 @@
 import { Router } from "express";
 import { authRequired } from "../middlewares/validateToken.js";
-import { getInformation, createInformation, updateInformation, deleteInformation } from "../controllers/information.controller.js";
+import {
+  getInformation,
+  createInformation,
+  updateInformation,
+  deleteInformation,
+  getInformationByUserId,
+  updateInformationByUserId,
+} from "../controllers/information.controller.js";
 
-const router = Router()
+const router = Router();
 
 //llamamos a authRequired antes para ver que el usuario este logeado
 //guardar informacion
-router.post('/information', authRequired, createInformation );
+router.post("/information", authRequired, createInformation);
 
 //buscar informacion
-router.get('/information', authRequired, getInformation );
+router.get("/information", authRequired, getInformation);
 
 //actualizar informacion
-router.put('/information', authRequired, updateInformation );
+router.put("/information", authRequired, updateInformation);
 
 //eliminar informacion
-router.delete('/information', authRequired, deleteInformation );
+router.delete("/information", authRequired, deleteInformation);
+
+/////////////////////////////////////WEB/////////////////////////////////////
+
+router.get("/information/user/:id", authRequired, getInformationByUserId);
+
+// Actualizar información por usuario
+router.put("/information/:id", updateInformationByUserId);
 
 export default router;

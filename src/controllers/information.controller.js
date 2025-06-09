@@ -1,15 +1,25 @@
+// Codigo realizado por Segales
 import information from "../models/information.model.js";
 
 // Crear y guardar informacion del usuario para las recetas y el calculo
 export const createInformation = async (req, res) => {
-  const { Estatura, Peso, Edad, Genero } = req.body;
-  console.log("Información recibida del usuario:", { Estatura, Peso, Edad, Genero });
+  const { Nombre, Apellidos, Estatura, Peso, Edad, Genero } = req.body;
+  console.log("Información recibida del usuario:", {
+    Nombre,
+    Apellidos,
+    Estatura,
+    Peso,
+    Edad,
+    Genero,
+  });
   console.log("Usuario logueado:", req.user);
 
-  const userId = req.user.userId; 
+  const userId = req.user.userId;
 
   try {
     const newInfo = new information({
+      Nombre,
+      Apellidos,
       Estatura,
       Peso,
       Edad,
@@ -20,21 +30,23 @@ export const createInformation = async (req, res) => {
     const savedInformation = await newInfo.save();
     console.log("Información guardada:", savedInformation);
 
-    res.status(201).json({ message: "Información guardada", data: savedInformation });
+    res
+      .status(201)
+      .json({ message: "Información guardada", data: savedInformation });
   } catch (error) {
     console.error("Error al guardar información:", error);
     res.status(500).json({ message: "Error al guardar la información", error });
   }
 };
 
-
 // Buscar
 export const getInformation = async (req, res) => {
   const userId = req.user.userId; //para agarrar el id del usuario logeado usamos
-  
+
   try {
     const info = await information.find({ user: userId });
-    if (!info) return res.status(404).json({ message: "Información no encontrada" });
+    if (!info)
+      return res.status(404).json({ message: "Información no encontrada" });
     res.json(info);
   } catch (error) {
     res.status(500).json({ message: "Error al obtener la información", error });
@@ -54,11 +66,9 @@ export const updateInformation = async (req, res) => {
     }
 
     // Actualizar usando el _id del documento encontrado
-    const updated = await information.findByIdAndUpdate(
-      info._id,
-      req.body,
-      { new: true }
-    );
+    const updated = await information.findByIdAndUpdate(info._id, req.body, {
+      new: true,
+    });
 
     res.json({ message: "Información actualizada", data: updated });
   } catch (error) {
@@ -76,9 +86,68 @@ export const deleteInformation = async (req, res) => {
   try {
     const info = await information.findOneAndDelete({ user: userId });
 
-    if (!info) return res.status(404).json({ message: "Información no encontrada" });
+    if (!info)
+      return res.status(404).json({ message: "Información no encontrada" });
     res.json({ message: "Información eliminada", data: info });
   } catch (error) {
-    res.status(500).json({ message: "Error al eliminar la información", error });
+    res
+      .status(500)
+      .json({ message: "Error al eliminar la información", error });
+  }
+};
+
+/////////////////////////////////////WEB/////////////////////////////////////
+
+export const getInformationByUserId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const informacion = await information.findOne({ user: id });
+    if (!informacion) {
+      return res.status(404).json({
+        message: "Informacion del usuario no encontrada para el usuario",
+      });
+    }
+    res.json(informacion);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener la informacion", error });
+  }
+};
+// controllers/information.controller.js (o donde tengas los controladores)
+
+export const updateInformationByUserId = async (req, res) => {
+  const { id } = req.params; // ID del usuario
+  const { Nombre, Apellidos, Estatura, Peso, Edad, Genero } = req.body;
+
+  try {
+    // Buscar el documento de información para ese usuario
+    const informacionExistente = await information.findOne({ user: id });
+
+    if (!informacionExistente) {
+      return res.status(404).json({
+        message: "Información del usuario no encontrada",
+      });
+    }
+
+    // Actualizar los campos con los datos nuevos
+    informacionExistente.Nombre = Nombre || informacionExistente.Nombre;
+    informacionExistente.Apellidos =
+      Apellidos || informacionExistente.Apellidos;
+    informacionExistente.Estatura = Estatura || informacionExistente.Estatura;
+    informacionExistente.Peso = Peso || informacionExistente.Peso;
+    informacionExistente.Edad = Edad || informacionExistente.Edad;
+    informacionExistente.Genero = Genero || informacionExistente.Genero;
+
+    // Guardar cambios en la BD
+    await informacionExistente.save();
+
+    return res.json({
+      message: "Información actualizada correctamente",
+      informacion: informacionExistente,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Error al actualizar la información",
+      error: error.message,
+    });
   }
 };
