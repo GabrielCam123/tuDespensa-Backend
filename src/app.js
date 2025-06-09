@@ -43,7 +43,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.IP_LOCAL_FRONTEND,
+    origin: "https://tu-despensa-web-gold.vercel.app",
     //origin: "https://frontend-production-29e6.up.railway.app",
     credentials: true,
   })
